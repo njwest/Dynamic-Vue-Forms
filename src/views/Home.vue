@@ -57,7 +57,9 @@ export default {
     let questionArray = this.questions
 
     for(var i = 0; i < questionArray.length; i++){
-      this.form[questionArray[i].model] = questionArray[i].defaultValue ? questionArray[i].defaultValue : ''
+      var valueToSet = questionArray[i].defaultValue ? questionArray[i].defaultValue : ''
+
+      this.$set(this.form, questionArray[i].model, valueToSet)
     }
   },
   methods: {
