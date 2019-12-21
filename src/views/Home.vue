@@ -5,6 +5,7 @@
         <DynamicForm
           v-bind.sync="form"
           :questions="questions"
+          :answers="answers"
           :onSubmit="onSubmit"
         >
           <template slot="buttons">
@@ -50,14 +51,24 @@ export default {
           "label": "Age",
           "model": "age"
         }
-      ]
+      ],
+      answers: {
+        "name": "Chan Tai Man"
+      }
     }
   },
   beforeMount(){
     let questionArray = this.questions
 
     for(var i = 0; i < questionArray.length; i++){
-      var valueToSet = questionArray[i].defaultValue ? questionArray[i].defaultValue : ''
+      var valueToSet;
+      // var
+
+      if(this.answers[questionArray[i].model]){
+        valueToSet = this.answers[questionArray[i].model]
+      } else{
+        valueToSet = questionArray[i].defaultValue ? questionArray[i].defaultValue : ''
+      }
 
       this.$set(this.form, questionArray[i].model, valueToSet)
     }

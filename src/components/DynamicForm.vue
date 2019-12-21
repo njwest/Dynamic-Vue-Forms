@@ -11,8 +11,9 @@
               <b-form-input
                 v-if="question.type === 'TEXT'"
                 type="text"
-                :v-model="question.model"
+                :value="localForm[question.model]"
                 :id="question.model"
+                :v-model="localForm[question.model]"
                 @input="formInput(question.model, $event)"
                 class="mb-4 border"
                 size="lg"
@@ -24,9 +25,10 @@
               <b-form-input
                 v-if="question.type === 'NUMBER'"
                 type="number"
-                :v-model="question.model"
+                :v-model="localForm[question.model]"
                 :id="question.model"
                 @input="formInput(question.model, $event)"
+                :value="localForm[question.model]"
                 :min="question.min ? question.min : 0"
                 size="lg"
                 :required="question.required ? true : false"
@@ -47,7 +49,28 @@ export default {
   name: 'DynamicForm',
   props: {
     questions: Array,
+    answers: Object,
     onSubmit: Function
+  },
+  data(){
+    return{
+      localForm: {}
+    }
+  },
+  beforeMount(){
+    let questionArray = this.questions
+
+    for(var i = 0; i < questionArray.length; i++){
+      var valueToSet;
+
+      if(this.answers[questionArray[i].model]){
+        valueToSet = this.answers[questionArray[i].model]
+      } else{
+        valueToSet = questionArray[i].defaultValue ? questionArray[i].defaultValue : ''
+      }
+
+      this.$set(this.localForm, questionArray[i].model, valueToSet)
+    }
   },
   methods: {
     formInput(key, value) {
